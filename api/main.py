@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import io
 import json
-from .database import init_db, add_to_queue, get_next_pending, mark_as_sent
+from .database import init_db, add_to_queue, get_next_pending, mark_as_sent, get_queue_status
 from .agent import process_lead_with_agent
 from .mailer import send_email
 
@@ -66,3 +66,8 @@ async def process_email_cron():
         return {"status": "success", "message": f"Sent email to {target_email}"}
     else:
         return {"status": "error", "message": f"Failed to send to {target_email}"}
+
+
+@app.get("/api/status")
+async def get_status():
+    return get_queue_status()
