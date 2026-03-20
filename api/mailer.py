@@ -40,11 +40,12 @@ def send_email(to_address, subject, body_content):
                 </td>
                 <td style="vertical-align: middle; padding-left: 15px;">
                     <h3 style="margin: 0; color: #2A004D; font-size: 16px;">Flowmotive</h3>
-                    <p style="margin: 2px 0 8px 0; color: #4A4A4A; font-size: 12px; font-weight: bold;">ADVANCED AI & ML SOLUTIONS</p>
+                    <p style="margin: 2px 0 2px 0; color: #4A4A4A; font-size: 12px; font-weight: bold;">ADVANCED AI & ML SOLUTIONS</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px;"><a href="https://www.flowmotive.co" style="color: #2A004D; text-decoration: none;">www.flowmotive.co</a></p>
                     <div>
-                        <a href="[YOUR_FACEBOOK_LINK]" style="color: #2A004D; text-decoration: none; font-size: 12px; margin-right: 12px; font-weight: bold;">Facebook</a>
-                        <a href="[YOUR_INSTAGRAM_LINK]" style="color: #2A004D; text-decoration: none; font-size: 12px; margin-right: 12px; font-weight: bold;">Instagram</a>
-                        <a href="[YOUR_YOUTUBE_LINK]" style="color: #2A004D; text-decoration: none; font-size: 12px; font-weight: bold;">YouTube</a>
+                        <a href="https://www.facebook.com/flowmotive.co" style="color: #2A004D; text-decoration: none; font-size: 12px; margin-right: 12px; font-weight: bold;">Facebook</a>
+                        <a href="https://www.instagram.com/flowmotive.co/?hl=en" style="color: #2A004D; text-decoration: none; font-size: 12px; margin-right: 12px; font-weight: bold;">Instagram</a>
+                        <a href="https://www.linkedin.com/company/112237871/" style="color: #2A004D; text-decoration: none; font-size: 12px; font-weight: bold;">LinkedIn</a>
                     </div>
                 </td>
             </tr>
