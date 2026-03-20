@@ -40,3 +40,17 @@ def mark_as_sent(row_id):
         {"_id": ObjectId(row_id)},
         {"$set": {"status": "sent"}}
     )
+
+def get_queue_status():
+    pending_count = queue_collection.count_documents({"status": "pending"})
+    sent_count = queue_collection.count_documents({"status": "sent"})
+    next_doc = queue_collection.find_one(
+        {"status": "pending"},
+        sort=[("priority", -1), ("_id", 1)]
+    )
+    
+    return {
+        "pending": pending_count,
+        "sent": sent_count,
+        "next_email": next_doc["email"] if next_doc else None
+    }
