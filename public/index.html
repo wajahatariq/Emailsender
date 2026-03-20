@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowmotive Agent Dashboard</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            color: #333; 
+            padding: 40px; 
+        }
+
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        }
+
+        h1 { 
+            color: #111; 
+        }
+
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+
+        label { 
+            display: block; 
+            font-weight: bold; 
+            margin-bottom: 8px; 
+        }
+
+        textarea { 
+            width: 100%; 
+            height: 150px; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-family: inherit; 
+            resize: vertical;
+        }
+
+        input[type="file"] { 
+            border: 1px solid #ccc; 
+            padding: 10px; 
+            width: 100%; 
+            border-radius: 4px; 
+            box-sizing: border-box;
+        }
+
+        button { 
+            background-color: #000; 
+            color: #fff; 
+            border: none; 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover { 
+            background-color: #333; 
+        }
+
+        #status { 
+            margin-top: 20px; 
+            font-weight: bold; 
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .note { 
+            font-size: 0.9em; 
+            color: #666; 
+            margin-top: 5px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Flowmotive Automated Agent</h1>
+    
+    <div class="form-group">
+        <label for="fileUpload">Upload Excel/CSV File</label>
+        <input type="file" id="fileUpload" accept=".csv, .xlsx">
+        <div class="note">The system will automatically prioritize leads where website_has_google_tag is True.</div>
+    </div>
+
+    <div class="form-group">
+        <label for="emailTemplate">AI Prompt / Email Template</label>
+        <div class="note">Use column names in brackets like {name} or {city}. Groq will use this structure.</div>
+        <textarea id="emailTemplate" placeholder="Hi {name}, I noticed your website {website} might need some help..."></textarea>
+    </div>
+
+    <button onclick="startCampaign()">Load Queue & Start Pacer</button>
+
+    <div id="status"></div>
+</div>
+
+<script>
+    async function startCampaign() {
+        const fileInput = document.getElementById('fileUpload');
+        const templateInput = document.getElementById('emailTemplate').value;
+        const statusDiv = document.getElementById('status');
+
+        statusDiv.style.backgroundColor = "transparent";
+        statusDiv.innerText = "";
+
+        if (!fileInput.files[0] || !templateInput.trim()) {
+            statusDiv.innerText = "Error: Please provide both an Excel/CSV file and an email template.";
+            statusDiv.style.color = "#d32f2f";
+            statusDiv.style.backgroundColor = "#ffebee";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+        formData.append("template", templateInput);
+
+        statusDiv.innerText = "Uploading list and preparing queue...";
+        statusDiv.style.color = "#333";
+
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+                statusDiv.innerText = result.message + " The Vercel Cron will now send 1 email every 10 minutes.";
+                statusDiv.style.color = "#2e7d32";
+                statusDiv.style.backgroundColor = "#e8f5e9";
+                
+                fileInput.value = "";
+            } else {
+                statusDiv.innerText = "Error loading queue: " + (result.detail || "Unknown error occurred on the server.");
+                statusDiv.style.color = "#d32f2f";
+                statusDiv.style.backgroundColor = "#ffebee";
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+            statusDiv.innerText = "Network Error: Could not reach the backend API.";
+            statusDiv.style.color = "#d32f2f";
+            statusDiv.style.backgroundColor = "#ffebee";
+        }
+    }
+</script>
+
+</body>
+</html>
