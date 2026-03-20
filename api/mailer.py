@@ -69,7 +69,7 @@ def send_email(to_address, subject, body_content):
             imap = imaplib.IMAP4_SSL(IMAP_HOST, IMAP_PORT)
             imap.login(SMTP_USER, SMTP_PASS)
             # Hostinger typically uses 'Sent' for the sent mailbox
-            imap.append('Sent', '\\Seen', imaplib.Time2Internaldate(time.time()), msg.as_bytes())
+            imap.append('INBOX.Sent', '\\Seen', imaplib.Time2Internaldate(time.time()), msg.as_bytes())
             imap.logout()
         except Exception as imap_err:
             print(f"IMAP Append Error: {imap_err}")
